@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math League World Cup · Year 6</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0b2b1e 0%, #1a4f32 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        /* main app card */
+        .app {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.09);
+            backdrop-filter: blur(6px);
+            border-radius: 48px;
+            padding: 24px;
+            box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 215, 0, 0.3);
+            border: 1px solid #e6c34b;
+        }
+
+        /* world cup header */
+        .world-cup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0a1f14;
+            padding: 10px 30px;
+            border-radius: 100px;
+            border: 2px solid #f5d742;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 0 #00000033;
+        }
+
+        .trophy-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffd966;
+            font-weight: 800;
+            font-size: 1.9rem;
+            text-shadow: 3px 3px 0 #2b5e3b;
+            letter-spacing: 1px;
+        }
+
+        .trophy-title span {
+            font-size: 2.4rem;
+            filter: drop-shadow(0 0 6px gold);
+        }
+
+        .champion-badge {
+            background: #ffd966;
+            color: #0b2b1e;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 0 #9e7d1f;
+        }
+
+        /* main layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 280px;
+            gap: 18px;
+        }
+
+        /* panels */
+        .panel {
+            background: #ffffffdd;
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            box-shadow: inset 0 2px 6px #ffffff80, 0 10px 15px -8px #00000080;
+            border: 1px solid #f5e6b0;
+        }
+
+        .panel h2 {
+            font-size: 1.4rem;
+            color: #0c3724;
+            border-bottom: 4px solid #f5d742;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* student list */
+        .student-list {
+            max-height: 260px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            padding-right: 4px;
+        }
+
+        .student-item {
+            background: #e9f3e5;
+            margin: 8px 0;
+            padding: 10px 14px;
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #14462c;
+            border-left: 8px solid #3a9b5e;
+            box-shadow: 0 2px 5px #0000001a;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .student-item.active {
+            background: #fcf0c7;
+            border-left-color: #f5b81b;
+            transform: scale(1.02);
+            box-shadow: 0 6px 10px #0000001f;
+        }
+
+        .student-item .score-badge {
+            background: #2b5e3b;
+            color: #f5e6b0;
+            border-radius: 30px;
+            padding: 3px 12px;
+            font-size: 0.8rem;
+        }
+
+        .remove-student-btn {
+            background: #a13030;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            font-size: 0.9rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+            box-shadow: 0 2px 0 #5e1c1c;
+            flex-shrink: 0;
+        }
+
+        .remove-student-btn:hover {
+            background: #c73d3d;
+        }
+
+        .student-item .student-name {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        input, select, button, textarea {
+            border: none;
+            border-radius: 60px;
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: 0.1s;
+            font-family: inherit;
+        }
+
+        input, select, textarea {
+            background: #eef5ea;
+            border: 1px solid #b8d5b0;
+            color: #0f2f1e;
+            width: 100%;
+        }
+
+        textarea {
+            border-radius: 20px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        button {
+            background: #2b5e3b;
+            color: #ffd966;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0e2e1c;
+            font-weight: 700;
+            border: 1px solid #ffd966;
+        }
+
+        button:hover {
+            background: #3a7a4e;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 0 #0e2e1c;
+        }
+
+        button:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #0e2e1c;
+        }
+
+        .small-btn {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            background: #f5d742;
+            color: #0b2b1e;
+            box-shadow: 0 3px 0 #b3921e;
+            flex-shrink: 0;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            align-items: center;
+        }
+
+        /* topics chips */
+        .topics-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .topic-chip {
+            background: #2b5e3b;
+            color: #ffd966;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border: 1px solid #ffd966;
+            box-shadow: 0 2px 0 #0b2b1e;
+        }
+
+        .topic-chip.removable {
+            background: #7a3e2b;
+            color: #ffd9b0;
+            border-color: #f5b87a;
+        }
+
+        .topic-chip.removable span {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        /* central match arena */
+        .arena {
+            background: #fcf9ef;
+            border-radius: 28px;
+            padding: 20px;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            border: 3px solid #f5d742;
+            box-shadow: inset 0 0 0 2px #ffffff, 0 12px 18px -10px #000000;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0c3724;
+            color: #ffd966;
+            padding: 10px 18px;
+            border-radius: 100px;
+            margin-bottom: 14px;
+        }
+
+        .timer-box {
+            background: #daa520;
+            color: #0b2b1e;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 1.6rem;
+            min-width: 100px;
+            text-align: center;
+            letter-spacing: 2px;
+            box-shadow: 0 0 0 2px #ffd966;
+        }
+
+        .question-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .question-content {
+            background: #eef5ea;
+            border-radius: 24px;
+            padding: 18px;
+            border: 1px dashed #3a7a4e;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #0f2f1e;
+            word-break: break-word;
+        }
+
+        .question-content img, .question-content embed {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 12px;
+            margin-top: 8px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #b8d5b0;
+            color: #0f2f1e;
+            padding: 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: left;
+            box-shadow: 0 4px 0 #b0c0a8;
+            transition: all 0.05s;
+        }
+
+        .option-btn:hover {
+            background: #e9f3e5;
+            border-color: #f5d742;
+        }
+
+        .option-btn.selected {
+            background: #f5d742;
+            border-color: #b3921e;
+            box-shadow: 0 2px 0 #b3921e;
+        }
+
+        .option-btn.correct {
+            background: #a5d6a5;
+            border-color: #2e7d32;
+        }
+
+        .option-btn.wrong {
+            background: #f8b5b5;
+            border-color: #b71c1c;
+        }
+
+        /* Essay area */
+        .essay-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .essay-area textarea {
+            min-height: 120px;
+            font-size: 1.05rem;
+            padding: 14px;
+            border-radius: 20px;
+            border: 2px solid #b8d5b0;
+            background: #ffffff;
+            font-weight: 500;
+        }
+
+        .essay-area textarea:focus {
+            border-color: #f5d742;
+            box-shadow: 0 0 0 3px #f5d74266;
+        }
+
+        .essay-submit-btn {
+            background: #2b5e3b;
+            color: #ffd966;
+            box-shadow: 0 4px 0 #0e2e1c;
+            padding: 14px;
+            font-size: 1.1rem;
+            border-radius: 60px;
+        }
+
+        .essay-correct-answer {
+            background: #fff8dd;
+            border: 2px solid #f5d742;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 1rem;
+            color: #0f2f1e;
+        }
+
+        .essay-correct-answer strong {
+            color: #2b5e3b;
+        }
+
+        .feedback {
+            font-weight: 700;
+            padding: 8px;
+            text-align: center;
+            border-radius: 40px;
+        }
+
+        .next-btn {
+            background: #f5d742;
+            color: #0b2b1e;
+            box-shadow: 0 5px 0 #b3921e;
+            font-size: 1.2rem;
+            padding: 14px;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* right panel */
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .file-label {
+            background: #eef5ea;
+            padding: 8px 12px;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #0f2f1e;
+            border: 1px dashed #2b5e3b;
+            cursor: pointer;
+        }
+
+        .file-label input {
+            display: none;
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .qualify-message {
+            background: #ffd966;
+            color: #0b2b1e;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 800;
+            text-align: center;
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+
+        .correct-answers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .correct-answer-item {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .correct-answer-item input[type="text"] {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+
+        .correct-answer-item .remove-answer-btn {
+            background: #a13030;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 2px 0 #5e1c1c;
+            flex-shrink: 0;
+        }
+
+        .add-answer-btn {
+            background: #3a7a4e;
+            color: #ffd966;
+            box-shadow: 0 3px 0 #0e2e1c;
+            padding: 8px;
+            font-size: 0.85rem;
+            border-radius: 40px;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .question-type-badge {
+            display: inline-block;
+            background: #f5d742;
+            color: #0b2b1e;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-left: 6px;
+            text-transform: uppercase;
+        }
+
+        footer {
+            margin-top: 10px;
+            color: #d4c28b;
+            text-align: center;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <!-- World Cup Header -->
+    <div class="world-cup-header">
+        <div class="trophy-title">
+            <span>🏆</span> MATH LEAGUE WORLD CUP
+        </div>
+        <div id="championDisplay" class="champion-badge">⚽ CHAMPION: ---</div>
+    </div>
+
+    <!-- Main 3-column layout -->
+    <div class="main-grid">
+        <!-- LEFT: Students & Topics -->
+        <div class="panel">
+            <h2>👥 Students</h2>
+            <div id="studentListContainer" class="student-list">
+                <!-- dynamic students -->
+            </div>
+            <div class="flex-row">
+                <input type="text" id="newStudentName" placeholder="Student name" />
+                <button id="addStudentBtn" class="small-btn">+ Add</button>
+            </div>
+
+            <h2 style="margin-top: 20px;">📚 Topics</h2>
+            <div id="topicsContainer" class="topics-container">
+                <!-- dynamic topics -->
+            </div>
+            <div class="flex-row">
+                <input type="text" id="newTopicInput" placeholder="New topic" />
+                <button id="addTopicBtn" class="small-btn">+ Add</button>
+            </div>
+            <p style="font-size:0.7rem; margin-top:8px; color:#3d5e4a;">Click ✕ to remove a topic</p>
+        </div>
+
+        <!-- CENTER: Match Arena -->
+        <div class="arena">
+            <div class="match-header">
+                <div>⚡ MATCH · <span id="currentRoundLabel">Round of 16</span></div>
+                <div class="timer-box" id="timerDisplay">40</div>
+            </div>
+
+            <div class="question-area" id="questionArea">
+                <!-- dynamic question + options -->
+                <div id="questionContent" class="question-content">
+                    Select a student and press "Start Match"
+                </div>
+                <div id="optionsContainer" class="options-grid"></div>
+                <div id="essayContainer" class="essay-area hidden"></div>
+                <div id="feedbackMessage" class="feedback"></div>
+                <button id="nextQuestionBtn" class="next-btn hidden">Next Question ➡️</button>
+                <button id="startMatchBtn" class="next-btn" style="background:#2b5e3b; color:#ffd966; box-shadow:0 5px 0 #0e2e1c;">⚽ START MATCH</button>
+            </div>
+
+            <div id="qualifyMessage" class="qualify-message hidden">🎉 YOU QUALIFY FOR THE NEXT ROUND! 🎉</div>
+        </div>
+
+        <!-- RIGHT: Add questions & upload -->
+        <div class="panel">
+            <h2>➕ Add Question</h2>
+            <div class="upload-area">
+                <select id="questionType">
+                    <option value="text">📝 Text Question (MCQ)</option>
+                    <option value="image">🖼️ Image Question (MCQ)</option>
+                    <option value="pdf">📄 PDF Question (MCQ)</option>
+                    <option value="essay">✍️ Essay (multiple correct answers)</option>
+                </select>
+                <input type="text" id="questionTextInput" placeholder="Question text or URL" />
+                <textarea id="essayQuestionText" class="hidden" placeholder="Essay question text..."></textarea>
+
+                <!-- MCQ options (hidden for essay) -->
+                <div id="mcqOptions">
+                    <input type="text" id="optionA" placeholder="Option A" />
+                    <input type="text" id="optionB" placeholder="Option B" />
+                    <input type="text" id="optionC" placeholder="Option C" />
+                    <input type="text" id="optionD" placeholder="Option D" />
+                    <select id="correctOption">
+                        <option value="0">Correct: A</option>
+                        <option value="1">Correct: B</option>
+                        <option value="2">Correct: C</option>
+                        <option value="3">Correct: D</option>
+                    </select>
+                </div>
+
+                <!-- Essay correct answers (hidden for MCQ) -->
+                <div id="essayAnswersContainer" class="hidden">
+                    <label style="font-size:0.85rem; font-weight:700; color:#0c3724; margin-bottom:4px; display:block;">Correct Answers (add multiple):</label>
+                    <div id="correctAnswersList" class="correct-answers-list">
+                        <!-- dynamic correct answer inputs -->
+                    </div>
+                    <button type="button" id="addCorrectAnswerBtn" class="add-answer-btn">+ Add another correct answer</button>
+                </div>
+
+                <label class="file-label">
+                    📎 or upload image/pdf <input type="file" id="fileUpload" accept="image/*,application/pdf">
+                </label>
+                <button id="addQuestionBtn" class="btn-block">Add to Question Bank</button>
+                <p style="font-size:0.7rem; margin-top:6px; color:#3a5e4a;">Questions saved automatically</p>
+            </div>
+        </div>
+    </div>
+    <footer>40 seconds per question · progress saved locally</footer>
+</div>
+
+<script>
+    (function(){
+        // ---------- STORAGE / STATE ----------
+        let state = {
+            students: [],
+            topics: ["Place value","Rounding","Sequence","Special numbers","Factors and multiples (HCF/LCM)","Mean median mode range","Integers (4 ops)","Decimals (4 ops)","Change letters/shapes"],
+            questions: [],
+            currentStudentId: null,
+            currentQuestionIndex: 0,
+            matchActive: false,
+            timerInterval: null,
+            timeLeft: 40,
+            selectedOption: null,
+            answered: false,
+            round: 1,
+            champion: null,
+            _questionCount: 0,
+        };
+
+        // Default questions
+        const defaultQuestions = [
+            { type:'text', text:'What is the place value of 7 in 3,742?', options:['7','70','700','7000'], correct:2 },
+            { type:'text', text:'Round 4,867 to the nearest hundred.', options:['4,800','4,900','5,000','4,870'], correct:1 },
+            { type:'text', text:'What is the next number in the sequence: 3, 7, 11, 15, ...?', options:['18','19','20','21'], correct:1 },
+            { type:'text', text:'Which of these is a special number? (prime)', options:['9','15','21','17'], correct:3 },
+            { type:'text', text:'Find the HCF of 12 and 18.', options:['2','3','6','9'], correct:2 },
+            { type:'text', text:'What is the LCM of 4 and 6?', options:['12','18','24','10'], correct:0 },
+            { type:'text', text:'Find the mean of 4, 7, 9, 10.', options:['7','7.5','8','8.5'], correct:1 },
+            { type:'text', text:'Calculate: (-5) + 8 - 3', options:['0','2','-6','6'], correct:0 },
+            { type:'text', text:'What is 2.5 + 1.75?', options:['4.25','3.75','4.5','3.25'], correct:0 },
+            { type:'text', text:'If ★ = 5, what is ★ + 12?', options:['17','12','7','5'], correct:0 },
+            { type:'essay', text:'Explain how to find the LCM of 6 and 8.', correctAnswers:['list multiples','24','common multiple'] },
+        ];
+
+        // ---------- DOM ELEMENTS ----------
+        const studentListEl = document.getElementById('studentListContainer');
+        const topicsContainer = document.getElementById('topicsContainer');
+        const newStudentInput = document.getElementById('newStudentName');
+        const addStudentBtn = document.getElementById('addStudentBtn');
+        const newTopicInput = document.getElementById('newTopicInput');
+        const addTopicBtn = document.getElementById('addTopicBtn');
+        const championDisplay = document.getElementById('championDisplay');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const questionContent = document.getElementById('questionContent');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const essayContainer = document.getElementById('essayContainer');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        const startMatchBtn = document.getElementById('startMatchBtn');
+        const qualifyMessage = document.getElementById('qualifyMessage');
+        const currentRoundLabel = document.getElementById('currentRoundLabel');
+
+        // question bank
+        const questionType = document.getElementById('questionType');
+        const questionTextInput = document.getElementById('questionTextInput');
+        const essayQuestionText = document.getElementById('essayQuestionText');
+        const mcqOptions = document.getElementById('mcqOptions');
+        const essayAnswersContainer = document.getElementById('essayAnswersContainer');
+        const correctAnswersList = document.getElementById('correctAnswersList');
+        const addCorrectAnswerBtn = document.getElementById('addCorrectAnswerBtn');
+        const optionA = document.getElementById('optionA');
+        const optionB = document.getElementById('optionB');
+        const optionC = document.getElementById('optionC');
+        const optionD = document.getElementById('optionD');
+        const correctOption = document.getElementById('correctOption');
+        const fileUpload = document.getElementById('fileUpload');
+        const addQuestionBtn = document.getElementById('addQuestionBtn');
+
+        // ---------- PERSISTENCE ----------
+        function loadFromStorage() {
+            const saved = localStorage.getItem('mathWorldCupData');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.students && parsed.topics && parsed.questions) {
+                        state = {...state, ...parsed};
+                    }
+                } catch(e) { console.warn('parse error'); }
+            } else {
+                state.students = [
+                    { id: 's1', name: 'Emma', score: 0, roundWins: 0, eliminated: false },
+                    { id: 's2', name: 'Liam', score: 0, roundWins: 0, eliminated: false },
+                    { id: 's3', name: 'Sophia', score: 0, roundWins: 0, eliminated: false },
+                    { id: 's4', name: 'Noah', score: 0, roundWins: 0, eliminated: false },
+                ];
+                state.questions = [...defaultQuestions];
+            }
+            if (state.questions.length === 0) state.questions = [...defaultQuestions];
+            if (state.students.length === 0) {
+                state.students = [{ id: 's1', name: 'Emma', score: 0, roundWins: 0, eliminated: false }];
+            }
+            // Reset transient match state
+            state.matchActive = false;
+            state.answered = false;
+            state.selectedOption = null;
+            state._questionCount = 0;
+            saveToStorage();
+        }
+
+        function saveToStorage() {
+            const toSave = {
+                students: state.students,
+                topics: state.topics,
+                questions: state.questions,
+                champion: state.champion,
+                round: state.round,
+            };
+            localStorage.setItem('mathWorldCupData', JSON.stringify(toSave));
+        }
+
+        // ---------- RENDER ----------
+        function renderStudents() {
+            studentListEl.innerHTML = '';
+            state.students.forEach(s => {
+                const div = document.createElement('div');
+                div.className = `student-item ${state.currentStudentId === s.id ? 'active' : ''}`;
+                div.dataset.id = s.id;
+                div.innerHTML = `
+                    <span class="student-name">${s.name} ${s.eliminated ? '❌' : ''}</span>
+                    <span style="display:flex; align-items:center; gap:6px;">
+                        <span class="score-badge">${s.score} pts</span>
+                        <button class="remove-student-btn" data-id="${s.id}" title="Remove student">✕</button>
+                    </span>
+                `;
+                div.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-student-btn')) return;
+                    if (state.matchActive) {
+                        alert('Match in progress! Finish the match first.');
+                        return;
+                    }
+                    if (s.eliminated) {
+                        alert('This student is eliminated.');
+                        return;
+                    }
+                    state.currentStudentId = s.id;
+                    renderStudents();
+                });
+                studentListEl.appendChild(div);
+            });
+
+            // Attach remove handlers
+            document.querySelectorAll('.remove-student-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    if (state.matchActive) {
+                        alert('Cannot remove student during a match.');
+                        return;
+                    }
+                    if (state.students.length <= 1) {
+                        alert('At least one student is required.');
+                        return;
+                    }
+                    if (state.currentStudentId === id) {
+                        state.currentStudentId = null;
+                    }
+                    state.students = state.students.filter(s => s.id !== id);
+                    // If no current student, pick first non-eliminated
+                    if (!state.currentStudentId && state.students.length > 0) {
+                        const firstActive = state.students.find(s => !s.eliminated) || state.students[0];
+                        state.currentStudentId = firstActive.id;
+                    }
+                    saveToStorage();
+                    renderStudents();
+                });
+            });
+        }
+
+        function renderTopics() {
+            topicsContainer.innerHTML = '';
+            state.topics.forEach((topic, idx) => {
+                const chip = document.createElement('div');
+                chip.className = 'topic-chip removable';
+                chip.innerHTML = `${topic} <span data-index="${idx}">✕</span>`;
+                chip.querySelector('span').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (state.topics.length <= 1) {
+                        alert('At least one topic required');
+                        return;
+                    }
+                    state.topics.splice(idx, 1);
+                    saveToStorage();
+                    renderTopics();
+                });
+                topicsContainer.appendChild(chip);
+            });
+        }
+
+        function renderQuestion() {
+            // Reset containers
+            optionsContainer.innerHTML = '';
+            essayContainer.innerHTML = '';
+            essayContainer.classList.add('hidden');
+            optionsContainer.classList.remove('hidden');
+
+            if (!state.questions.length) {
+                questionContent.innerHTML = 'No questions available. Add some!';
+                return;
+            }
+
+            // Pick random question
+            const qIndex = Math.floor(Math.random() * state.questions.length);
+            state.currentQuestionIndex = qIndex;
+            const q = state.questions[qIndex];
+
+            // Render question content
+            let html = '';
+            if (q.type === 'text') {
+                html = `<strong>${q.text}</strong>`;
+            } else if (q.type === 'image' && q.imageUrl) {
+                html = `<div>${q.text || 'Look at the image:'}</div><img src="${q.imageUrl}" alt="question image" />`;
+            } else if (q.type === 'pdf' && q.pdfUrl) {
+                html = `<div>${q.text || 'PDF question:'}</div><embed src="${q.pdfUrl}" type="application/pdf" />`;
+            } else if (q.type === 'essay') {
+                html = `<strong>✍️ Essay: ${q.text}</strong>`;
+            } else {
+                html = `<strong>${q.text || 'Question'}</strong>`;
+            }
+            questionContent.innerHTML = html;
+
+            // Render based on type
+            if (q.type === 'essay') {
+                // Show essay input
+                optionsContainer.classList.add('hidden');
+                essayContainer.classList.remove('hidden');
+                essayContainer.innerHTML = `
+                    <textarea id="essayResponse" placeholder="Type your answer here..."></textarea>
+                    <button class="essay-submit-btn" id="essaySubmitBtn">Submit Answer</button>
+                `;
+                document.getElementById('essaySubmitBtn').addEventListener('click', () => handleEssaySubmit(q));
+            } else if (q.options && q.options.length) {
+                // Show MCQ options
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = `${String.fromCharCode(65 + i)}. ${opt}`;
+                    btn.dataset.index = i;
+                    btn.addEventListener('click', () => handleOptionClick(i, btn));
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            state.selectedOption = null;
+            state.answered = false;
+            feedbackMessage.textContent = '';
+            nextQuestionBtn.classList.add('hidden');
+        }
+
+        // ---------- MCQ HANDLER ----------
+        function handleOptionClick(index, btnElement) {
+            if (!state.matchActive || state.answered) return;
+            if (state.selectedOption !== null) return;
+
+            const q = state.questions[state.currentQuestionIndex];
+            const isCorrect = (index === q.correct);
+            state.selectedOption = index;
+            state.answered = true;
+
+            document.querySelectorAll('.option-btn').forEach((btn, i) => {
+                if (i === q.correct) btn.classList.add('correct');
+                else if (i === index && !isCorrect) btn.classList.add('wrong');
+            });
+
+            const student = state.students.find(s => s.id === state.currentStudentId);
+            if (student) {
+                if (isCorrect) {
+                    student.score += 10;
+                    feedbackMessage.textContent = '✅ Correct! +10 points';
+                    feedbackMessage.style.color = '#1e5a2b';
+                } else {
+                    feedbackMessage.textContent = '❌ Incorrect. Try the next one!';
+                    feedbackMessage.style.color = '#a13030';
+                }
+                renderStudents();
+                saveToStorage();
+            }
+
+            stopTimer();
+            nextQuestionBtn.classList.remove('hidden');
+        }
+
+        // ---------- ESSAY HANDLER (multiple correct answers) ----------
+        function handleEssaySubmit(q) {
+            if (!state.matchActive || state.answered) return;
+            const essayResponse = document.getElementById('essayResponse');
+            if (!essayResponse) return;
+            const userText = essayResponse.value.trim().toLowerCase();
+
+            if (!userText) {
+                alert('Please type an answer before submitting.');
+                return;
+            }
+
+            const correctAnswers = (q.correctAnswers || []).map(a => a.toLowerCase().trim());
+            const isCorrect = correctAnswers.some(correct =>
+                userText.includes(correct) || correct.includes(userText)
+            );
+
+            state.answered = true;
+            state.selectedOption = 'essay';
+
+            const student = state.students.find(s => s.id === state.currentStudentId);
+            if (student) {
+                if (isCorrect) {
+                    student.score += 10;
+                    feedbackMessage.textContent = '✅ Correct! +10 points';
+                    feedbackMessage.style.color = '#1e5a2b';
+                } else {
+                    feedbackMessage.textContent = '❌ Not quite. Check the correct answers below.';
+                    feedbackMessage.style.color = '#a13030';
+                }
+                renderStudents();
+                saveToStorage();
+            }
+
+            // Show correct answers
+            const correctAnswersHtml = correctAnswers.map(a => `<li>${a}</li>`).join('');
+            essayContainer.innerHTML += `
+                <div class="essay-correct-answer">
+                    <strong>Accepted answers:</strong>
+                    <ul style="margin: 6px 0 0 18px;">${correctAnswersHtml}</ul>
+                </div>
+            `;
+
+            // Disable textarea
+            essayResponse.disabled = true;
+            const submitBtn = document.getElementById('essaySubmitBtn');
+            if (submitBtn) submitBtn.disabled = true;
+
+            stopTimer();
+            nextQuestionBtn.classList.remove('hidden');
+        }
+
+        // ---------- NEXT QUESTION ----------
+        function nextQuestion() {
+            if (!state.matchActive) return;
+            state._questionCount = (state._questionCount || 0) + 1;
+
+            if (state._questionCount >= 3) {
+                finishMatch();
+                return;
+            }
+            stopTimer();
+            state.timeLeft = 40;
+            timerDisplay.textContent = state.timeLeft;
+            state.answered = false;
+            state.selectedOption = null;
+            renderQuestion();
+            startTimer();
+        }
+
+        function finishMatch() {
+            stopTimer();
+            state.matchActive = false;
+            const student = state.students.find(s => s.id === state.currentStudentId);
+            if (!student) return;
+
+            const qualified = student.score >= 20;
+            if (qualified) {
+                student.roundWins += 1;
+                qualifyMessage.classList.remove('hidden');
+                qualifyMessage.textContent = `🎉 ${student.name} QUALIFIES FOR THE NEXT ROUND! 🎉`;
+                if (state.round < 4) state.round++;
+                else {
+                    state.champion = student.name;
+                    championDisplay.textContent = `🏆 CHAMPION: ${student.name} 🏆`;
+                }
+            } else {
+                qualifyMessage.classList.remove('hidden');
+                qualifyMessage.textContent = `😞 ${student.name} did not qualify. Better luck next time!`;
+                student.eliminated = true;
+            }
+            updateRoundLabel();
+            state._questionCount = 0;
+            startMatchBtn.classList.remove('hidden');
+            nextQuestionBtn.classList.add('hidden');
+            renderStudents();
+            saveToStorage();
+        }
+
+        function updateRoundLabel() {
+            const rounds = ['Round of 16', 'Quarter-final', 'Semi-final', 'Final'];
+            currentRoundLabel.textContent = rounds[Math.min(state.round-1, 3)] || 'Final';
+        }
+
+        // ---------- TIMER ----------
+        function startTimer() {
+            stopTimer();
+            state.timeLeft = 40;
+            timerDisplay.textContent = state.timeLeft;
+            state.timerInterval = setInterval(() => {
+                state.timeLeft--;
+                timerDisplay.textContent = state.timeLeft;
+                if (state.timeLeft <= 0) {
+                    stopTimer();
+                    if (!state.answered && state.matchActive) {
+                        state.answered = true;
+                        feedbackMessage.textContent = '⏰ Time out! No points.';
+                        feedbackMessage.style.color = '#a13030';
+
+                        const q = state.questions[state.currentQuestionIndex];
+                        if (q.type === 'essay') {
+                            // Show correct answers
+                            const correctAnswers = (q.correctAnswers || []);
+                            const correctAnswersHtml = correctAnswers.map(a => `<li>${a}</li>`).join('');
+                            essayContainer.innerHTML += `
+                                <div class="essay-correct-answer">
+                                    <strong>Accepted answers:</strong>
+                                    <ul style="margin: 6px 0 0 18px;">${correctAnswersHtml}</ul>
+                                </div>
+                            `;
+                            const essayResponse = document.getElementById('essayResponse');
+                            if (essayResponse) essayResponse.disabled = true;
+                            const submitBtn = document.getElementById('essaySubmitBtn');
+                            if (submitBtn) submitBtn.disabled = true;
+                        } else {
+                            document.querySelectorAll('.option-btn').forEach((btn, i) => {
+                                if (i === q.correct) btn.classList.add('correct');
+                            });
+                        }
+                        nextQuestionBtn.classList.remove('hidden');
+                    }
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
+            }
+        }
+
+        // ---------- START MATCH ----------
+        function startMatch() {
+            if (!state.currentStudentId) {
+                alert('Select a student first!');
+                return;
+            }
+            const student = state.students.find(s => s.id === state.currentStudentId);
+            if (student.eliminated) {
+                alert('This student is eliminated.');
+                return;
+            }
+            state.matchActive = true;
+            state._questionCount = 0;
+            student.score = 0;
+            renderStudents();
+            startMatchBtn.classList.add('hidden');
+            nextQuestionBtn.classList.add('hidden');
+            qualifyMessage.classList.add('hidden');
+            stopTimer();
+            state.timeLeft = 40;
+            timerDisplay.textContent = state.timeLeft;
+            renderQuestion();
+            startTimer();
+            updateRoundLabel();
+        }
+
+        // ---------- ADD STUDENT / TOPIC / QUESTION ----------
+        function addStudent() {
+            const name = newStudentInput.value.trim();
+            if (!name) return;
+            const id = 's' + Date.now() + Math.random().toString(36).substr(2, 5);
+            state.students.push({ id, name, score: 0, roundWins: 0, eliminated: false });
+            newStudentInput.value = '';
+            saveToStorage();
+            renderStudents();
+        }
+
+        function addTopic() {
+            const topic = newTopicInput.value.trim();
+            if (!topic) return;
+            if (!state.topics.includes(topic)) state.topics.push(topic);
+            newTopicInput.value = '';
+            saveToStorage();
+            renderTopics();
+        }
+
+        // ---------- ADD QUESTION (MCQ + ESSAY) ----------
+        function addQuestion() {
+            const type = questionType.value;
+
+            if (type === 'essay') {
+                // Essay question
+                const text = essayQuestionText.value.trim() || questionTextInput.value.trim();
+                if (!text) {
+                    alert('Please enter the essay question text.');
+                    return;
+                }
+
+                // Collect correct answers
+                const answerInputs = correctAnswersList.querySelectorAll('input[type="text"]');
+                const correctAnswers = [];
+                answerInputs.forEach(inp => {
+                    const val = inp.value.trim();
+                    if (val) correctAnswers.push(val);
+                });
+
+                if (correctAnswers.length === 0) {
+                    alert('Please add at least one correct answer.');
+                    return;
+                }
+
+                state.questions.push({
+                    type: 'essay',
+                    text: text,
+                    correctAnswers: correctAnswers,
+                });
+
+                // Clear form
+                essayQuestionText.value = '';
+                questionTextInput.value = '';
+                resetCorrectAnswersList();
+                saveToStorage();
+                alert('Essay question added!');
+                return;
+            }
+
+            // MCQ types (text, image, pdf)
+            const text = questionTextInput.value.trim();
+            const optA = optionA.value.trim();
+            const optB = optionB.value.trim();
+            const optC = optionC.value.trim();
+            const optD = optionD.value.trim();
+            const correctIdx = parseInt(correctOption.value);
+
+            if (!optA || !optB || !optC || !optD) {
+                alert('Please fill all four options');
+                return;
+            }
+            const options = [optA, optB, optC, optD];
+            let imageUrl = null, pdfUrl = null;
+
+            if (type === 'image') {
+                if (!text) { alert('Please provide image URL in question text field'); return; }
+                imageUrl = text;
+            } else if (type === 'pdf') {
+                if (!text) { alert('Please provide PDF URL'); return; }
+                pdfUrl = text;
+            } else if (type === 'text' && !text) {
+                alert('Please enter question text');
+                return;
+            }
+
+            state.questions.push({
+                type: type,
+                text: text || 'Question',
+                options: options,
+                correct: correctIdx,
+                imageUrl: imageUrl,
+                pdfUrl: pdfUrl
+            });
+
+            // Clear form
+            questionTextInput.value = '';
+            optionA.value = ''; optionB.value = ''; optionC.value = ''; optionD.value = '';
+            saveToStorage();
+            alert('Question added!');
+        }
+
+        // ---------- ESSAY ANSWER INPUT MANAGEMENT ----------
+        function createCorrectAnswerInput(value = '') {
+            const div = document.createElement('div');
+            div.className = 'correct-answer-item';
+            div.innerHTML = `
+                <input type="text" placeholder="Correct answer" value="${value.replace(/"/g, '&quot;')}" />
+                <button type="button" class="remove-answer-btn" title="Remove">✕</button>
+            `;
+            div.querySelector('.remove-answer-btn').addEventListener('click', () => {
+                if (correctAnswersList.children.length <= 1) {
+                    alert('At least one correct answer is required.');
+                    return;
+                }
+                div.remove();
+            });
+            return div;
+        }
+
+        function resetCorrectAnswersList() {
+            correctAnswersList.innerHTML = '';
+            correctAnswersList.appendChild(createCorrectAnswerInput());
+        }
+
+        // ---------- INIT ----------
+        function init() {
+            loadFromStorage();
+            renderStudents();
+            renderTopics();
+            updateRoundLabel();
+            if (state.champion) championDisplay.textContent = `🏆 CHAMPION: ${state.champion} 🏆`;
+
+            if (state.students.length && !state.currentStudentId) {
+                const firstActive = state.students.find(s => !s.eliminated) || state.students[0];
+                state.currentStudentId = firstActive.id;
+            }
+            renderStudents();
+
+            // Reset correct answers list
+            resetCorrectAnswersList();
+
+            // Event listeners
+            addStudentBtn.addEventListener('click', addStudent);
+            addTopicBtn.addEventListener('click', addTopic);
+            addQuestionBtn.addEventListener('click', addQuestion);
+            startMatchBtn.addEventListener('click', startMatch);
+            nextQuestionBtn.addEventListener('click', nextQuestion);
+
+            // Essay answer management
+            addCorrectAnswerBtn.addEventListener('click', () => {
+                correctAnswersList.appendChild(createCorrectAnswerInput());
+            });
+
+            // Question type toggle
+            questionType.addEventListener('change', () => {
+                const isEssay = questionType.value === 'essay';
+                mcqOptions.classList.toggle('hidden', isEssay);
+                essayAnswersContainer.classList.toggle('hidden', !isEssay);
+                questionTextInput.classList.toggle('hidden', isEssay);
+                essayQuestionText.classList.toggle('hidden', !isEssay);
+            });
+
+            // Enter key support
+            newStudentInput.addEventListener('keypress', (e) => e.key === 'Enter' && addStudent());
+            newTopicInput.addEventListener('keypress', (e) => e.key === 'Enter' && addTopic());
+
+            // Save on unload
+            window.addEventListener('beforeunload', () => {
+                if (state.matchActive) stopTimer();
+                saveToStorage();
+            });
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
